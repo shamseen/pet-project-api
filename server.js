@@ -33,11 +33,11 @@ app.use(cors()); // exposes endpoints for apps to request
 
 // /* --- Routes --- */
 // app.use("/user", require("./controllers/usersController"));
-// app.use("/search", require("./controllers/searchController"));
+app.use("/search", require("./controllers/searchController"));
 
-// app.get("/", (req, res) => {
-//   res.send(`<h1>Pet Project API</h1>`);
-// });
+app.get("/", (req, res) => {
+  res.send(`<h1>Pet Project API</h1>`);
+});
 
 /* --- Leggggoooooooo --- */
 app.listen(PORT, () =>
