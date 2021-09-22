@@ -75,3 +75,12 @@ export const verify = async (req, res) => {
     res.status(401).json({error: "Not Authorized"})
   }
 }
+
+export const getUsers = async (req, res) => {
+  try {
+    const users = await User.find({})
+    res.send(users)
+  } catch (e) {
+    res.status(404).json({error: e.message})
+  }
+}
