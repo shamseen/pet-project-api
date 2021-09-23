@@ -21,7 +21,14 @@ class PetFinderDataService {
       return {
         name: animal.name,
         id: animal.id,
+        breed: animal.breeds,
+        sex: animal.gender,
+        specialNeeds: animal.special_needs,
+        age: animal.age,
+        size: animal.size,
+        furType: animal.coat,
         url: animal.url,
+        description: animal.description,
       };
     });
 
@@ -53,6 +60,7 @@ class PetFinderDataService {
       const response = await this.client.animal.search({
         type: "Dog",
         special_needs: true,
+        breed: "pug",
         page: 1,
         limit: 5,
       });
