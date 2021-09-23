@@ -15,7 +15,39 @@ class PetFinderDataService {
     this.client = new petfinder.Client({ apiKey: API_KEY, secret: SECRET });
   }
 
-  async searchPFTest() {
+  /* Extracts relevant info from petfinder data */
+  parseResponse(responseArr) {
+    const results = responseArr.map((animal, i) => {
+      return {
+        name: animal.name,
+        id: animal.id,
+        url: animal.url,
+      };
+    });
+
+    return results;
+  }
+
+  /* Calls petfinder and returns relevant info */
+  async search(params) {
+    try {
+      // fetch
+      const response = await this.client.animal.search(params);
+
+      // grabbing relevant info
+      const results = this.parseResponse(response.data.animals);
+
+      // passing info back to controller
+      return results;
+
+      // error flow control
+    } catch (err) {
+      return err.message;
+    }
+  }
+
+  /* Hard coded search for initial testing */
+  async testSearch() {
     try {
       // fetch
       const response = await this.client.animal.search({
@@ -26,16 +58,12 @@ class PetFinderDataService {
       });
 
       // grabbing relevant info
-      const results = response.data.animals.map((animal, i) => {
-        return {
-          name: animal.name,
-          id: animal.id,
-          url: animal.url,
-        };
-      });
+      const results = this.parseResponse(response.data.animals);
 
       // passing info back to controller
       return results;
+
+      // error flow control
     } catch (err) {
       return err.message;
     }

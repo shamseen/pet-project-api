@@ -1,5 +1,6 @@
 const express = require("express");
 const router = express.Router();
+const PetfinderParams = require("../models/PetfinderParams");
 const PetFinderDataService = require("../dataServices/PetFinderDataService");
 const PF_DataService = new PetFinderDataService();
 
@@ -8,7 +9,7 @@ const PF_DataService = new PetFinderDataService();
 // Test GET
 router.get("/test/", async (req, res) => {
   try {
-    const found = await PF_DataService.searchPFTest();
+    const found = await PF_DataService.testSearch();
     res.status(200).json(found); // looks ugly
     console.log(found); // formatted like json proper
   } catch (err) {
@@ -19,16 +20,20 @@ router.get("/test/", async (req, res) => {
   }
 });
 
-// GET using search filters (in req body)
+// GET using search filters (in req header)
 router.get("/", async (req, res) => {
   // dirty BUT no giant query string
-  const params = JSON.parse(req.headers.params);
+  const params = new PetfinderParams(req.headers.params);
   console.log(params);
+
   try {
-    // const found = await PF_DataService.searchTest();
-    res.status(200).json(params);
+    // calling petfinder api
+    const found = await PF_DataService.search(params);
+    res.status(200).json(found);
+
+    // error control
   } catch (err) {
-    console.log(err);
+    console.log(err.message);
     res.status(400).json({
       msg: err.message,
     });
