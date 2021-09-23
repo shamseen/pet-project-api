@@ -1,8 +1,11 @@
 /* --- Required modules --- */
-require("dotenv").config(); // inject .env into process.env
-const express = require("express"); // http server
-const cors = require("cors"); // expose resources for external websites
-const mongoose = require("mongoose"); // talks to mongo db
+// require("dotenv").config(); // inject .env into process.env
+import express from "express"; // http server
+import cors from "cors"; // expose resources for external websites
+// import mongoose from "mongoose"; // talks to mongo db
+import db from "./db/index.js";
+import morgan from "morgan"; // provides details in terminal
+import routes from "./routes/index.js"
 
 /* --- App variables --- */
 const app = express();
@@ -30,18 +33,25 @@ app.use((req, res, next) => {
 });
 
 app.use(cors()); // exposes endpoints for apps to request
-
+app.use(morgan("dev")); // provides details in terminal 
 // /* --- Routes --- */
 // app.use("/user", require("./controllers/usersController"));
 // app.use("/search", require("./controllers/searchController"));
 
-// app.get("/", (req, res) => {
-//   res.send(`<h1>Pet Project API</h1>`);
-// });
+app.use("/api", routes)
+
+app.get("/", (req, res) => {
+  res.send(`<h1>Pet Project API</h1>`);
+});
 
 /* --- Leggggoooooooo --- */
-app.listen(PORT, () =>
-  console.log(
-    `>> API Server: Listening on port ${PORT}. waiting for database...`
-  )
-);
+// app.listen(PORT, () =>
+//   console.log(
+//     `>> API Server: Listening on port ${PORT}. waiting for database...`
+//   )
+// );
+
+db.on("connected", () => {
+  console.log("Connected to MongoDB")
+  app.listen(PORT, () => console.log(`Connected on port: ${PORT}`))
+})
