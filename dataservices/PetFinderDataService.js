@@ -11,11 +11,11 @@ var petfinder = require("@petfinder/petfinder-js");
 
 class PetFinderDataService {
   constructor() {
-    // instantiating SDK for API access
+    // instantiating SDK to access PetFinder
     this.client = new petfinder.Client({ apiKey: API_KEY, secret: SECRET });
   }
 
-  async searchPF() {
+  async searchPFTest() {
     try {
       // fetch
       const response = await this.client.animal.search({
